@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b28">
+  <title>Outs — Hold’em Drawing Trainer</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="poker.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <a class="brand" href="index.html" aria-label="Outs home"><span class="brand-mark" aria-hidden="true">♠</span><span>outs<span class="brand-dot">.</span></span></a>
+      <span class="header-note">A LITTLE PRACTICE. A BETTER INSTINCT.</span>
+      <button id="rules-toggle" class="text-button" aria-expanded="false" aria-controls="rules">How it works <span aria-hidden="true">↗</span></button>
+    </header>
+
+    <section id="rules" class="rules" aria-labelledby="rules-title" hidden>
+      <h2 id="rules-title">Count your outs. Trust your math.</h2>
+      <p>An out is an unseen card that improves your hand to a higher hand category using at least one hole card. We count pairs, two pair, trips, straights, flushes, full houses, quads, and straight flushes. Overlapping draws count each card once.</p>
+      <p>Pair, trips, and quads outs must match a hole-card rank. A board pairing on its own doesn’t count as an improvement. Better kickers and higher versions of the same hand category don’t count. An ace can be low in A–2–3–4–5 straights.</p>
+      <p><strong>Turn ≈ outs × 2%. By the river ≈ outs × 4%.</strong> “By the river” includes both chances to hit after the flop. These are practice estimates, capped at 100%. Two aces on a dry, unpaired flop have 2 set outs: turn ≈ 4%, by the river ≈ 8%.</p>
+      <p>This measures drawing chances, not your chance of beating an opponent. There is no opponent hand, no discount for losing outs, and no backdoor draws requiring two specific cards. Exact figures describe hitting at least one of your currently identified outs; they don’t account for new draws or the board changing later.</p>
+      <p>Before starting, uncheck any draw types you don’t want to practice. The trainer keeps dealing random hands behind the scenes until one matches at least one selected type. A hand can have several draw types; answers still count all valid outs. Use Draw settings to change the selection later.</p>
+      <p>Estimate the answer mentally, reveal it, then mark yourself. Each mark immediately deals a new matching hand. Your session score resets when you close or reload this page.</p>
+    </section>
+
+    <div class="intro">
+      <div><p class="eyebrow">TEXAS HOLD’EM · DRAWING PRACTICE</p><h1>Know your outs.</h1><p class="subtitle">Read the flop. Count your outs. Find your drawing equity.</p></div>
+      <div class="session-stats" aria-label="Session results">
+        <div><span id="answered" class="stat-value">0</span><span class="stat-label">PRACTICED</span></div>
+        <div><span id="accuracy" class="stat-value">—</span><span class="stat-label">ACCURACY</span></div>
+      </div>
+    </div>
+
+    <section id="draw-settings" class="draw-settings" aria-labelledby="settings-title">
+      <p class="eyebrow">CHOOSE YOUR PRACTICE</p>
+      <h2 id="settings-title" tabindex="-1">Which draws would you like to practice?</h2>
+      <p class="settings-description">All options start selected. Uncheck any you want to leave out. A hand only needs to match <strong>one</strong> selected option.</p>
+      <fieldset id="draw-options" class="draw-options"><legend class="visually-hidden">Draw types to practice</legend><div id="draw-checkboxes" class="draw-checkboxes"></div></fieldset>
+      <p class="settings-note">These choices filter the hands you see. Revealed answers still include all valid outs for that hand, even when it also has other draws. “Overcards” means pairing a hole card above the original flop’s highest rank.</p>
+      <div class="settings-actions"><p id="selection-message" role="status"></p><div class="grade-buttons"><button id="cancel-settings" class="secondary-button" hidden>Cancel</button><button id="start-training" class="primary-button">Start training <span aria-hidden="true">→</span></button></div></div>
+    </section>
+
+    <div id="training" hidden>
+    <div class="training-toolbar"><span id="active-draws"></span><button id="edit-settings" class="text-button">Draw settings <span aria-hidden="true">↗</span></button></div>
+    <section id="poker-table" class="table" aria-label="Current poker hand">
+      <div class="table-top"><span class="live-label"><span class="live-dot"></span> FLOP PRACTICE</span><span id="hand-number">HAND 001</span></div>
+      <div class="cards-layout">
+        <div class="card-group"><h2>YOUR HOLE CARDS</h2><div id="hole-cards" class="cards" role="group" aria-label="Your hole cards"></div></div>
+        <div class="table-divider" aria-hidden="true"></div>
+        <div class="card-group"><h2>THE FLOP</h2><div id="flop-cards" class="cards" role="group" aria-label="The flop"></div></div>
+      </div>
+      <div class="table-bottom"><span>2 hole cards. 3 on the board. What’s your draw?</span><span aria-hidden="true">♣ <span class="subtle-suit">♦</span> ♥ ♠</span></div>
+    </section>
+
+    <section class="answer-panel" aria-label="Drawing equity answer">
+      <div id="question">
+        <div class="question-copy"><span class="step-number">01</span><div><h2>What are your drawing chances?</h2><p>Count the outs, then estimate your turn and river percentages.</p></div></div>
+        <button id="reveal" class="primary-button">Reveal answer <span aria-hidden="true">→</span></button>
+      </div>
+      <div id="answer" hidden>
+        <div class="answer-heading"><div><p class="eyebrow">THE ANSWER</p><h2 id="made-hand"></h2></div><span class="approx-label">RULE OF 2 &amp; 4</span></div>
+        <div class="answer-numbers" aria-live="polite" aria-atomic="true">
+          <div><span id="outs" class="answer-value"></span><span class="answer-label">OUTS</span></div>
+          <div><span id="turn" class="answer-value"></span><span class="answer-label">TURN <span class="formula">× 2</span></span></div>
+          <div><span id="river" class="answer-value"></span><span class="answer-label">BY THE RIVER <span class="formula">× 4</span></span></div>
+        </div>
+        <p id="draw-summary" class="draw-summary"></p>
+        <details class="out-details"><summary>See the outs &amp; exact percentages</summary><div id="out-cards" class="out-cards"></div><p id="exact"></p></details>
+        <div class="grading"><div><h3>Did you get it?</h3><p>Mark your answer to deal the next hand.</p></div><div class="grade-buttons"><button id="incorrect" class="secondary-button"><span aria-hidden="true">✕</span> Incorrect</button><button id="correct" class="primary-button"><span aria-hidden="true">✓</span> Correct</button></div></div>
+      </div>
+    </section>
+    </div>
+    <footer><span>Drawing equity only. No opponent assumptions.</span><span id="session-message" role="status">A fresh deck. Every hand.</span></footer>
+  </main>
+</body>
+</html>
